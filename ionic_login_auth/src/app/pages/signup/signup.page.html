@@ -1,0 +1,61 @@
+<ion-content [fullscreen]="true">
+  <div class="header">
+    <ion-title class="title">Hosgeldiniz</ion-title>
+    <p class="subTitle">Hesap olusturmak icin kayit olun</p>
+  </div>
+
+    <form [formGroup]="regForm"   novalidate>
+      <div class="ion-padding">
+        <ion-item>
+          <ion-input formControlName="fullname" placeholder="Isminiz" class="input"></ion-input>
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-item>
+        <!--input girilmeden diger alana gecildiyse veya gecersiz input girildiyse, ion-text alerti göster-->
+        <div *ngIf="this.regForm.controls?.['fullname'].touched && this.regForm.controls?.['fullname'].invalid">
+          <ion-text *ngIf="errorControl.fullname.errors?.required">
+            Ad soyad gereklidir
+          </ion-text>
+        </div>
+
+        <ion-item>
+          <ion-input formControlName="email" placeholder="mailiniz" class="input"></ion-input>
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-item>
+        <div *ngIf="this.regForm.controls?.['email'].touched && this.regForm.controls?.['email'].invalid">
+          <ion-text *ngIf="errorControl.email.errors?.required">
+            Email gereklidir
+          </ion-text>
+          <ion-text *ngIf="errorControl.email.errors?.pattern">
+            Gecerli bir email gereklidir
+          </ion-text>
+        </div>
+
+        <ion-item>
+          <ion-input formControlName="password" placeholder="sifreniz" class="input"></ion-input>
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </ion-item>
+        <div *ngIf="this.regForm.controls?.['password'].touched && this.regForm.controls?.['password'].invalid">
+          <ion-text *ngIf="errorControl.password.errors?.required">
+            Sifre gereklidir
+          </ion-text>
+          <ion-text *ngIf="errorControl.password.errors?.pattern">
+            Sifre en az :
+            1 karakter
+            1 büyük harf
+            1 sayi
+            9 karakter uzunlugundan olusmalidir
+          </ion-text>
+        </div>
+
+        <div class="signInLink">
+          <p>Üye misiniz? <a style="color:#FFC33F" [routerLink]="['/login']">Giris Yapin</a></p>
+        </div>
+      </div>
+      <ion-fab vertical="bottom" horizontal="end" style="margin: 30px;"> 
+        <ion-fab-button (click)="signUp()">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </form>
+  
+</ion-content>
