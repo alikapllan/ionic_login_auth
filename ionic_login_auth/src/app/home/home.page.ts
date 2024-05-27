@@ -9,27 +9,59 @@ import { ToastService } from '../toast.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  user:any;
+  user: any;
+  email: string;
+
   constructor(public router: Router, 
               public authService: AuthenticationService,
-              public toastService: ToastService) {
+              public toastService: ToastService ) {
     this.user = authService.getProfile();
   }
 
-  async logout(){
-    this.authService.signOut().then(()=> {
-      this.router.navigate(['/landing']);
-    }).catch((error)=>{
-      console.log(error);
-    })
+  ngOnInit() {
+    this.setUserEmail();
   }
 
-  async deleteUser(){
-    ( await this.authService.getProfile()).delete().then(()=> {
-      this.toastService.showToast('User has been deleted successfully', 'top');
-      this.router.navigate(['/landing']);
-    }).catch((error)=>{
+  async setUserEmail() {
+    try {
+      const userProfile = await this.authService.getProfile();
+      if (userProfile && userProfile.email) {
+        this.email = userProfile.email;
+      } else {
+        this.toastService.showToast('Unable to fetch user email.', 'bottom');
+      }
+    } catch (error) {
       console.log(error);
-    })
+      this.toastService.showToast('Error fetching user profile.', 'bottom');
+    }
+  }
+
+  async deleteUser() {
+    (await this.authService.getProfile()).delete().then(() => {
+      this.toastService.showToast('Kullanici basariyl silindi', 'top');
+      this.router.navigate(['/landing']);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  async logout() {
+    this.authService.signOut().then(() => {
+      this.router.navigate(['/landing']);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  async updateEmail() {
+    if (this.email !== '') {
+      (await this.authService.getProfile()).updateEmail(this.email).then(() => {
+        this.toastService.showToast('Email basariyla degistirildi', 'top');
+      }).catch((error) => {
+        console.log(error);
+      });
+    } else {
+      this.toastService.showToast('Lütfen email giriniz', 'bottom');
+    }
   }
 }

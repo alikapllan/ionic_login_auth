@@ -18,10 +18,10 @@ export class ResetPasswordPage implements OnInit {
   async resetPassword(){
     this.authService.resetPassword(this.email).then(()=>{
       console.log('Sifre sifirlama maili gönderildi')
-      this.router.navigate(['/login'])
     }).catch((error)=> {
       console.log(error)
     })
+    this.router.navigate(['/login'])
   }
 
 }

@@ -26,6 +26,11 @@ export class AuthenticationService {
   }
 
   async getProfile(){
-    return await this.ngFireAuth.currentUser;
+    const user = await this.ngFireAuth.currentUser;
+    if (user) {
+      return user;
+    } else {
+      throw new Error('Herhangi bir kullanici kayitli degil');
+    }
   }
 }
